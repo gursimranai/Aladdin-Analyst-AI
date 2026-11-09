@@ -1,3 +1,6 @@
+import logging
+from io import StringIO
+
 import pandas as pd
 import pytest
 from pandas.errors import EmptyDataError
@@ -5,6 +8,7 @@ from pandas.testing import assert_frame_equal
 
 from aladdin.exceptions import UnsupportedFileFormatError
 from aladdin.ingestion.csv_loader import load_csv
+from aladdin.logging_config import configure_logging, get_logger
 
 
 def test_load_csv_successfully(tmp_path):
@@ -141,3 +145,41 @@ def test_load_csv_with_selected_columns(tmp_path):
 
     assert list(result.columns) == ["product", "price"]
     assert result.shape == (2, 2)
+
+
+def test_load_csv_logs_successful_ingestion(tmp_path):
+    """Test that successful CSV ingestion produces useful logs."""
+
+    csv_file = tmp_path / "sales.csv"
+    csv_file.write_text(
+        "product,price\nLaptop,50000\nMouse,500\n",
+        encoding="utf-8",
+    )
+
+    configure_logging(level=logging.INFO)
+
+    logger = get_logger("ingestion.csv_loader")
+
+    output_stream = StringIO()
+    handler = logging.StreamHandler(output_stream)
+
+    previous_propagate = logger.propagate
+    logger.addHandler(handler)
+    logger.propagate = False
+
+    try:
+        dataframe = load_csv(csv_file)
+        output = output_stream.getvalue()
+
+    finally:
+        logger.removeHandler(handler)
+        handler.close()
+        logger.propagate = previous_propagate
+
+    assert len(dataframe) == 2
+    assert len(dataframe.columns) == 2
+
+    assert "Starting CSV ingestion" in output
+    assert "Successfully loaded CSV" in output
+    assert "rows=2" in output
+    assert "columns=2" in output
