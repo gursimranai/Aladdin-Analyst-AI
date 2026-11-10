@@ -43,6 +43,15 @@ from aladdin.recommendations import (
     RecommendationReport,
     recommend_cleaning,
 )
+from aladdin.visualization import (
+    ChartResult,
+    ChartType,
+    VisualizationConfig,
+    create_bar_chart,
+    create_correlation_heatmap,
+    create_histogram,
+    create_missing_values_chart,
+)
 
 __version__ = "0.1.0"
 
@@ -86,4 +95,12 @@ __all__ = [
     "InsightPriority",
     "InsightReport",
     "generate_insights",
+    # Visualization
+    "ChartResult",
+    "ChartType",
+    "VisualizationConfig",
+    "create_histogram",
+    "create_bar_chart",
+    "create_missing_values_chart",
+    "create_correlation_heatmap",
 ]
