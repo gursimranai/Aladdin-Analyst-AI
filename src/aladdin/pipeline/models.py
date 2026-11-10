@@ -3,8 +3,10 @@ from dataclasses import dataclass
 import pandas as pd
 
 from aladdin.cleaning.models import CleaningResult
+from aladdin.insights.models import InsightReport
 from aladdin.profiling.models import DataProfile
 from aladdin.quality.models import DataQualityReport
+from aladdin.recommendations.models import RecommendationReport
 
 
 @dataclass
@@ -13,6 +15,8 @@ class AnalysisResult:
 
     initial_profile: DataProfile
     initial_quality_report: DataQualityReport
+    recommendations: RecommendationReport
+    insights: InsightReport
 
     cleaning_result: CleaningResult
 

@@ -28,6 +28,10 @@ parquet = [
     "pyarrow>=15.0",
 ]
 
+visualization = [
+    "matplotlib>=3.9",
+]
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 

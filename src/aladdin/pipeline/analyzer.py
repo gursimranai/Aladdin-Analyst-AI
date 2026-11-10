@@ -6,10 +6,12 @@ import pandas as pd
 from aladdin.cleaning.cleaner import clean_data
 from aladdin.cleaning.models import CleaningConfig
 from aladdin.ingestion.loader import load_data
+from aladdin.insights.engine import generate_insights
 from aladdin.logging_config import get_logger
 from aladdin.pipeline.models import AnalysisResult
 from aladdin.profiling.profiler import profile_data
 from aladdin.quality.assessor import assess_data_quality
+from aladdin.recommendations.engine import recommend_cleaning
 
 logger = get_logger("pipeline.analyzer")
 
@@ -37,6 +39,8 @@ def analyze_dataframe(
     # Step 1: Analyze the original dataset.
     initial_profile = profile_data(dataframe, top_n=top_n)
     initial_quality_report = assess_data_quality(dataframe)
+    recommendations = recommend_cleaning(dataframe)
+    insights = generate_insights(dataframe)
 
     # Step 2: Apply explicitly configured cleaning operations.
     cleaning_result = clean_data(
@@ -56,11 +60,12 @@ def analyze_dataframe(
     result = AnalysisResult(
         initial_profile=initial_profile,
         initial_quality_report=initial_quality_report,
+        recommendations=recommendations,
+        insights=insights,
         cleaning_result=cleaning_result,
         final_profile=final_profile,
         final_quality_report=final_quality_report,
     )
-
     logger.info(
         "Dataset analysis completed | initial_rows=%d | final_rows=%d",
         initial_profile.row_count,

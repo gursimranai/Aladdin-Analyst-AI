@@ -13,6 +13,13 @@ from aladdin.ingestion import (
     load_json,
     load_parquet,
 )
+from aladdin.insights import (
+    DataInsight,
+    InsightCategory,
+    InsightPriority,
+    InsightReport,
+    generate_insights,
+)
 from aladdin.pipeline import (
     AnalysisResult,
     analyze_dataframe,
@@ -28,6 +35,13 @@ from aladdin.quality import (
     DataQualityReport,
     IssueSeverity,
     assess_data_quality,
+)
+from aladdin.recommendations import (
+    CleaningRecommendation,
+    RecommendationAction,
+    RecommendationPriority,
+    RecommendationReport,
+    recommend_cleaning,
 )
 
 __version__ = "0.1.0"
@@ -61,4 +75,15 @@ __all__ = [
     "AnalysisResult",
     "analyze_dataframe",
     "analyze_file",
+    # Recommendations
+    "CleaningRecommendation",
+    "RecommendationAction",
+    "RecommendationPriority",
+    "RecommendationReport",
+    "recommend_cleaning",
+    "DataInsight",
+    "InsightCategory",
+    "InsightPriority",
+    "InsightReport",
+    "generate_insights",
 ]
