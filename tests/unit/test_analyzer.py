@@ -22,6 +22,15 @@ def test_analyze_dataframe_returns_complete_result():
     assert result.initial_profile.row_count == 3
     assert result.initial_quality_report.has_warnings
 
+    assert result.recommendations.row_count == 3
+    assert result.recommendations.column_count == 2
+    assert result.recommendations.has_recommendations
+
+    assert any(
+        recommendation.column_name == "name"
+        for recommendation in result.recommendations.recommendations
+    )
+
     assert result.final_profile.row_count == 3
     assert result.final_quality_report.has_warnings
 
@@ -48,6 +57,13 @@ def test_analyze_dataframe_with_cleaning_configuration():
     result = analyze_dataframe(
         dataframe,
         cleaning_config=config,
+    )
+    # Recommendations describe the original dataset,
+    # even though configured cleaning resolves the issue.
+    assert result.recommendations.has_recommendations
+    assert any(
+        recommendation.column_name == "name"
+        for recommendation in result.recommendations.recommendations
     )
 
     assert result.initial_quality_report.has_warnings
@@ -121,3 +137,61 @@ def test_analyze_file_forwards_loader_arguments(tmp_path):
 def test_analyze_dataframe_rejects_invalid_input():
     with pytest.raises(TypeError, match="pandas DataFrame"):
         analyze_dataframe([1, 2, 3])
+
+
+def test_analyze_dataframe_includes_insights():
+    dataframe = pd.DataFrame(
+        {
+            "age": [20, None, 30, 40, 50],
+            "sales": [10, 12, 11, 13, 200],
+        }
+    )
+
+    result = analyze_dataframe(dataframe)
+
+    assert result.insights.row_count == 5
+    assert result.insights.column_count == 2
+    assert result.insights.has_insights
+
+    insight_codes = {item.code for item in result.insights.insights}
+
+    assert "MISSING_VALUES_age" in insight_codes
+    assert "POTENTIAL_OUTLIERS_sales" in insight_codes
+
+
+def test_analyze_dataframe_insights_describe_original_data():
+    from aladdin.cleaning.models import (
+        CleaningConfig,
+        MissingValueConfig,
+        MissingValueStrategy,
+    )
+
+    dataframe = pd.DataFrame(
+        {
+            "age": [20, None, 30, 40, 50],
+            "sales": [10, 12, 11, 13, 200],
+        }
+    )
+
+    original = dataframe.copy(deep=True)
+
+    config = CleaningConfig(
+        missing_values={
+            "age": MissingValueConfig(
+                strategy=MissingValueStrategy.DROP_ROWS,
+            )
+        }
+    )
+
+    result = analyze_dataframe(
+        dataframe,
+        cleaning_config=config,
+    )
+
+    insight_codes = {item.code for item in result.insights.insights}
+
+    assert result.initial_profile.row_count == 5
+    assert result.final_profile.row_count == 4
+    assert "MISSING_VALUES_age" in insight_codes
+
+    pd.testing.assert_frame_equal(dataframe, original)

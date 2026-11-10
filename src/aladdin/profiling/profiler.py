@@ -1,5 +1,6 @@
 from typing import Any
 
+import numpy as np
 import pandas as pd
 
 from aladdin.logging_config import get_logger
@@ -9,9 +10,9 @@ logger = get_logger("profiling.profiler")
 
 
 def _safe_float(value: Any) -> float | None:
-    """Convert a numeric value to float, returning None for missing values."""
+    """Convert a finite numeric value to float, returning None otherwise."""
 
-    if pd.isna(value):
+    if pd.isna(value) or not np.isfinite(value):
         return None
 
     return float(value)
@@ -93,11 +94,14 @@ def profile_data(
         ) and not pd.api.types.is_bool_dtype(series.dtype)
 
         if is_numeric:
-            column_profile.mean = _safe_float(series.mean())
-            column_profile.median = _safe_float(series.median())
-            column_profile.std = _safe_float(series.std())
-            column_profile.min_value = _safe_float(series.min())
-            column_profile.max_value = _safe_float(series.max())
+            # Exclude missing and infinite values from numerical statistics.
+            finite_series = series.replace([np.inf, -np.inf], np.nan).dropna()
+
+            column_profile.mean = _safe_float(finite_series.mean())
+            column_profile.median = _safe_float(finite_series.median())
+            column_profile.std = _safe_float(finite_series.std())
+            column_profile.min_value = _safe_float(finite_series.min())
+            column_profile.max_value = _safe_float(finite_series.max())
 
         else:
             column_profile.top_values = [

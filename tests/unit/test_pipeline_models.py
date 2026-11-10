@@ -1,9 +1,11 @@
 import pandas as pd
 
 from aladdin.cleaning.models import CleaningReport, CleaningResult
+from aladdin.insights.models import InsightReport
 from aladdin.pipeline.models import AnalysisResult
 from aladdin.profiling.models import DataProfile
 from aladdin.quality.models import DataQualityReport
+from aladdin.recommendations.models import RecommendationReport
 
 
 def test_analysis_result_stores_all_components():
@@ -38,6 +40,16 @@ def test_analysis_result_stores_all_components():
     result = AnalysisResult(
         initial_profile=profile,
         initial_quality_report=quality_report,
+        recommendations=RecommendationReport(
+            row_count=3,
+            column_count=1,
+            recommendations=[],
+        ),
+        insights=InsightReport(
+            row_count=3,
+            column_count=1,
+            insights=[],
+        ),
         cleaning_result=cleaning_result,
         final_profile=profile,
         final_quality_report=quality_report,
@@ -82,6 +94,16 @@ def test_analysis_result_dataframe_property():
     result = AnalysisResult(
         initial_profile=profile,
         initial_quality_report=quality_report,
+        recommendations=RecommendationReport(
+            row_count=3,
+            column_count=1,
+            recommendations=[],
+        ),
+        insights=InsightReport(
+            row_count=3,
+            column_count=1,
+            insights=[],
+        ),
         cleaning_result=cleaning_result,
         final_profile=profile,
         final_quality_report=quality_report,
