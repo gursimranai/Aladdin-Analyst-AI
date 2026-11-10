@@ -1,0 +1,9 @@
+customer,age,city,purchase_amount,category,region,source_system
+Alice,25,Delhi,1500,Electronics,North,CRM
+Bob,,Mumbai,2000,Fashion,West,CRM
+Charlie,35,Delhi,,Electronics,North,CRM
+Alice,25,Delhi,1500,Electronics,North,CRM
+David,29,,1200,Fashion,North,CRM
+Eve,22,Chandigarh,900,Fashion,North,CRM
+,31,Mumbai,1800,Electronics,West,CRM
+Frank,27,Delhi,1100,Fashion,North,CRM
