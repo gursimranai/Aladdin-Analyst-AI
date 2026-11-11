@@ -8,6 +8,50 @@ from aladdin.visualization.config import VisualizationConfig
 from aladdin.visualization.models import ChartResult, ChartType
 
 
+def _create_figure(config: VisualizationConfig):
+    """Create a figure without changing Matplotlib's global backend."""
+
+    try:
+        if config.show:
+            import matplotlib.pyplot as plt
+
+            figure, axis = plt.subplots(
+                figsize=(config.width, config.height),
+                dpi=config.dpi,
+            )
+
+            return figure, axis, plt
+
+        from matplotlib.backends.backend_agg import FigureCanvasAgg
+        from matplotlib.figure import Figure
+
+        figure = Figure(
+            figsize=(config.width, config.height),
+            dpi=config.dpi,
+        )
+
+        FigureCanvasAgg(figure)
+        axis = figure.subplots()
+
+        return figure, axis, None
+
+    except ImportError as exc:
+        raise ImportError(
+            "Visualization support requires Matplotlib. "
+            "Install it using: python -m pip install "
+            "'aladdin-analyst-ai[visualization]'"
+        ) from exc
+
+
+def _close_figure(figure, pyplot):
+    """Clean up a figure after chart-generation failure."""
+
+    if pyplot is not None:
+        pyplot.close(figure)
+    else:
+        figure.clear()
+
+
 def create_histogram(
     dataframe: pd.DataFrame,
     column: str,
@@ -57,30 +101,13 @@ def create_histogram(
     if finite_values.size == 0:
         raise ValueError(f"Column '{column}' contains no finite numerical values.")
 
-    # Import Matplotlib only when visualization is requested.
-    try:
-        import matplotlib
-
-        if not config.show:
-            matplotlib.use("Agg", force=True)
-
-        import matplotlib.pyplot as plt
-    except ImportError as exc:
-        raise ImportError(
-            "Visualization support requires Matplotlib. "
-            "Install it using: python -m pip install "
-            "'aladdin-analyst-ai[visualization]'"
-        ) from exc
-
     chart_title = title or f"Distribution of {column}"
 
     figure = None
+    plt = None
 
     try:
-        figure, axis = plt.subplots(
-            figsize=(config.width, config.height),
-            dpi=config.dpi,
-        )
+        figure, axis, plt = _create_figure(config)
 
         axis.hist(finite_values, bins=bins, edgecolor="black")
 
@@ -125,7 +152,7 @@ def create_histogram(
 
     except Exception:
         if figure is not None:
-            plt.close(figure)
+            _close_figure(figure, plt)
         raise
 
 
@@ -255,29 +282,12 @@ def create_bar_chart(
             }
         )
 
-    try:
-        import matplotlib
-
-        if not config.show:
-            matplotlib.use("Agg", force=True)
-
-        import matplotlib.pyplot as plt
-
-    except ImportError as exc:
-        raise ImportError(
-            "Visualization support requires Matplotlib. "
-            "Install it using: python -m pip install "
-            "'aladdin-analyst-ai[visualization]'"
-        ) from exc
-
     chart_title = title or f"Distribution of {column}"
     figure = None
+    plt = None
 
     try:
-        figure, axis = plt.subplots(
-            figsize=(config.width, config.height),
-            dpi=config.dpi,
-        )
+        figure, axis, plt = _create_figure(config)
 
         axis.bar(labels, frequencies.values)
 
@@ -325,7 +335,7 @@ def create_bar_chart(
 
     except Exception:
         if figure is not None:
-            plt.close(figure)
+            _close_figure(figure, plt)
         raise
 
 
@@ -384,29 +394,12 @@ def create_missing_values_chart(
     labels = [record["label"] for record in records]
     counts = [record["missing_count"] for record in records]
 
-    try:
-        import matplotlib
-
-        if not config.show:
-            matplotlib.use("Agg", force=True)
-
-        import matplotlib.pyplot as plt
-
-    except ImportError as exc:
-        raise ImportError(
-            "Visualization support requires Matplotlib. "
-            "Install it using: python -m pip install "
-            "'aladdin-analyst-ai[visualization]'"
-        ) from exc
-
     chart_title = title or "Missing Values by Column"
     figure = None
+    plt = None
 
     try:
-        figure, axis = plt.subplots(
-            figsize=(config.width, config.height),
-            dpi=config.dpi,
-        )
+        figure, axis, plt = _create_figure(config)
 
         axis.bar(labels, counts, edgecolor="black")
 
@@ -453,7 +446,7 @@ def create_missing_values_chart(
 
     except Exception:
         if figure is not None:
-            plt.close(figure)
+            _close_figure(figure, plt)
         raise
 
 
@@ -528,29 +521,12 @@ def create_correlation_heatmap(
 
     matrix = correlation_matrix.to_numpy(dtype=float)
 
-    try:
-        import matplotlib
-
-        if not config.show:
-            matplotlib.use("Agg", force=True)
-
-        import matplotlib.pyplot as plt
-
-    except ImportError as exc:
-        raise ImportError(
-            "Visualization support requires Matplotlib. "
-            "Install it using: python -m pip install "
-            "'aladdin-analyst-ai[visualization]'"
-        ) from exc
-
     chart_title = title or "Numerical Feature Correlation"
     figure = None
+    plt = None
 
     try:
-        figure, axis = plt.subplots(
-            figsize=(config.width, config.height),
-            dpi=config.dpi,
-        )
+        figure, axis, plt = _create_figure(config)
 
         masked_matrix = np.ma.masked_invalid(matrix)
 
@@ -627,5 +603,5 @@ def create_correlation_heatmap(
 
     except Exception:
         if figure is not None:
-            plt.close(figure)
+            _close_figure(figure, plt)
         raise
