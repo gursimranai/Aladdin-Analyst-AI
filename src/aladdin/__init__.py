@@ -43,6 +43,14 @@ from aladdin.recommendations import (
     RecommendationReport,
     recommend_cleaning,
 )
+from aladdin.reporting import (
+    ReportConfig,
+    ReportFormat,
+    ReportResult,
+    export_html_report,
+    export_json_report,
+    export_report,
+)
 from aladdin.visualization import (
     ChartResult,
     ChartType,
@@ -103,4 +111,11 @@ __all__ = [
     "create_bar_chart",
     "create_missing_values_chart",
     "create_correlation_heatmap",
+    # Reporting
+    "ReportConfig",
+    "ReportFormat",
+    "ReportResult",
+    "export_json_report",
+    "export_html_report",
+    "export_report",
 ]
