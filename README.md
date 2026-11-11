@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/Version-0.1.0-blue?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Status-Active%20Development-orange?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tests-167%20Passing-success?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Tests-283%20Passing-success?style=for-the-badge" />
 </p>
 
 <p align="center">
@@ -79,6 +79,7 @@ The current implementation already provides the foundational workflow, while adv
 | Insight Engine | Missing values, dominant categories, high cardinality, outliers, skewness | ✅ |
 | Analysis Pipeline | Integrated profiling, quality, recommendations, insights, and cleaning | ✅ |
 | Testing | Unit and integration test suite | ✅ |
+| Visualization Engine | Histograms, bar charts, missing-value charts, correlation heatmaps | ✅ |
 
 ### Development principles
 
@@ -346,6 +347,25 @@ from aladdin import analyze_dataframe, analyze_file
 
 Both return an `AnalysisResult` containing the outputs of the workflow.
 
+### 8. Visualization Engine
+
+Provides configurable visual representations of dataset characteristics.
+
+Currently implemented chart capabilities include:
+
+- Histograms
+- Bar charts
+- Missing-value charts
+- Correlation heatmaps
+
+The visualization API exposes structured chart results and configuration options.
+
+Install visualization dependencies using:
+
+```bash
+python -m pip install -e ".[visualization]"
+```
+
 ---
 
 ## 🧪 Testing & Code Quality
@@ -382,7 +402,7 @@ python -m ruff format --check src tests
 <details>
 <summary><strong>Current verification</strong></summary>
 
-- 167 tests passing
+- 283 tests passing
 - Unit and integration tests
 - Ruff lint checks passing
 - Formatting checks passing
@@ -409,7 +429,7 @@ Aladdin is being developed in progressive milestones.
 | Correlation and relationship analysis | 🔄 Next |
 | Advanced statistical analysis | 📅 Planned |
 | Exploratory data analysis | 📅 Planned |
-| Visualization engine | 📅 Planned |
+| Visualization engine | ✅ Implemented |
 | Reporting and exports | 📅 Planned |
 | Machine-learning intelligence | 📅 Planned |
 | Natural-language data analysis | 🔭 Future |

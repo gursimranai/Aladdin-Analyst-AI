@@ -1,6 +1,6 @@
 
 [build-system]
-requires = ["setuptools>=75"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 
@@ -8,10 +8,22 @@ build-backend = "setuptools.build_meta"
 name = "aladdin-analyst-ai"
 version = "0.1.0"
 description = "A hybrid intelligent data analysis and automation platform."
+readme = "README.md"
 requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Gursimran Singh" },
+]
+
 dependencies = [
     "pandas>=2.2",
 ]
+
+[project.urls]
+Homepage = "https://github.com/gursimranai/Aladdin-Analyst-AI"
+Repository = "https://github.com/gursimranai/Aladdin-Analyst-AI"
+Issues = "https://github.com/gursimranai/Aladdin-Analyst-AI/issues"
 
 
 [project.optional-dependencies]
