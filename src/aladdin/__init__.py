@@ -47,6 +47,7 @@ from aladdin.reporting import (
     ReportConfig,
     ReportFormat,
     ReportResult,
+    export_csv_report,
     export_html_report,
     export_json_report,
     export_report,
@@ -117,5 +118,6 @@ __all__ = [
     "ReportResult",
     "export_json_report",
     "export_html_report",
+    "export_csv_report",
     "export_report",
 ]

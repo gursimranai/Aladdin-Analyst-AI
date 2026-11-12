@@ -1,6 +1,7 @@
 """Reporting and export functionality for Aladdin Analyst AI."""
 
 from aladdin.reporting.exporter import (
+    export_csv_report,
     export_html_report,
     export_json_report,
     export_report,
@@ -14,4 +15,5 @@ __all__ = [
     "export_json_report",
     "export_html_report",
     "export_report",
+    "export_csv_report",
 ]

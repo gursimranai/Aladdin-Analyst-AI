@@ -1,6 +1,8 @@
 """Export analysis results into structured JSON reports."""
 
+import csv
 import html
+import io
 import json
 import math
 import os
@@ -348,6 +350,97 @@ def _build_html_document(
 """
 
 
+def _flatten_report_value(
+    value: Any,
+    prefix: str = "",
+) -> list[tuple[str, str, str]]:
+    """Flatten nested report values into CSV-compatible rows."""
+
+    rows: list[tuple[str, str, str]] = []
+
+    if isinstance(value, dict):
+        if not value:
+            rows.append((prefix, "{}", "dict"))
+            return rows
+
+        for key, item in value.items():
+            path = f"{prefix}.{key}" if prefix else str(key)
+            rows.extend(_flatten_report_value(item, path))
+
+        return rows
+
+    if isinstance(value, list):
+        if not value:
+            rows.append((prefix, "[]", "list"))
+            return rows
+
+        for index, item in enumerate(value):
+            path = f"{prefix}[{index}]"
+            rows.extend(_flatten_report_value(item, path))
+
+        return rows
+
+    if value is None:
+        rows.append((prefix, "", "null"))
+    elif isinstance(value, bool):
+        rows.append((prefix, str(value).lower(), "bool"))
+    elif isinstance(value, str):
+        rows.append((prefix, value, "str"))
+    elif isinstance(value, (int, float)):
+        rows.append((prefix, str(value), type(value).__name__))
+    else:
+        rows.append(
+            (
+                prefix,
+                json.dumps(value, ensure_ascii=False, allow_nan=False),
+                type(value).__name__,
+            )
+        )
+
+    return rows
+
+
+def _escape_csv_spreadsheet_value(value: str) -> str:
+    """Prevent spreadsheet applications from interpreting text as formulas."""
+
+    dangerous_prefixes = ("=", "+", "-", "@")
+
+    if value.lstrip(" \t\r\n").startswith(dangerous_prefixes):
+        return f"'{value}"
+
+    return value
+
+
+def _build_csv_document(
+    report_document: dict[str, Any],
+) -> str:
+    """Convert a structured report document into a flat CSV document."""
+
+    buffer = io.StringIO(newline="")
+    writer = csv.writer(buffer)
+
+    writer.writerow(["section", "item", "value", "data_type"])
+
+    for section, section_data in report_document.items():
+        flattened_rows = _flatten_report_value(section_data)
+
+        for item, value, data_type in flattened_rows:
+            writer.writerow(
+                [
+                    _escape_csv_spreadsheet_value(section),
+                    _escape_csv_spreadsheet_value(item),
+                    (
+                        _escape_csv_spreadsheet_value(value)
+                        if data_type == "str"
+                        else value
+                    ),
+                    data_type,
+                ]
+            )
+
+    return buffer.getvalue()
+
+
 def export_json_report(
     result: AnalysisResult,
     config: ReportConfig,
@@ -477,22 +570,93 @@ def export_html_report(
         raise
 
 
+def export_csv_report(
+    result: AnalysisResult,
+    config: ReportConfig,
+) -> ReportResult:
+    """Export an AnalysisResult as a structured CSV report."""
+
+    if not isinstance(result, AnalysisResult):
+        raise TypeError("result must be an AnalysisResult.")
+
+    if not isinstance(config, ReportConfig):
+        raise TypeError("config must be a ReportConfig.")
+
+    if config.format != ReportFormat.CSV:
+        raise ValueError("config.format must be ReportFormat.CSV.")
+
+    filename = "analysis_report" if config.filename is None else config.filename
+
+    _validate_report_filename(filename)
+
+    filename_path = Path(filename)
+
+    if filename_path.suffix and filename_path.suffix.lower() != ".csv":
+        raise ValueError("CSV report filenames must use the .csv extension.")
+
+    if not filename_path.suffix:
+        filename = f"{filename}.csv"
+
+    output_dir = config.output_dir
+    output_path = output_dir / filename
+
+    try:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        generated_at = datetime.now(UTC)
+
+        report_document = _build_report_document(
+            result,
+            config,
+            generated_at,
+        )
+
+        csv_document = _build_csv_document(report_document)
+
+        _write_text_atomically(csv_document, output_path)
+
+        file_size = output_path.stat().st_size
+
+        logger.info("CSV report exported successfully: %s", output_path)
+
+        return ReportResult(
+            format=ReportFormat.CSV,
+            output_path=output_path,
+            file_size_bytes=file_size,
+            generated_at=generated_at,
+            metadata={
+                "sections": [
+                    section for section in report_document if section != "metadata"
+                ],
+                "source": result.source,
+            },
+        )
+
+    except (OSError, TypeError, ValueError):
+        logger.exception("Failed to export CSV report: %s", output_path)
+        raise
+
+
 def export_report(
     result: AnalysisResult,
     config: ReportConfig,
 ) -> ReportResult:
     """Export an AnalysisResult using the configured report format."""
 
+    if not isinstance(result, AnalysisResult):
+        raise TypeError("result must be an AnalysisResult.")
+
     if not isinstance(config, ReportConfig):
         raise TypeError("config must be a ReportConfig.")
 
-    if config.format == ReportFormat.JSON:
-        return export_json_report(result, config)
+    exporters = {
+        ReportFormat.JSON: export_json_report,
+        ReportFormat.HTML: export_html_report,
+        ReportFormat.CSV: export_csv_report,
+    }
 
-    if config.format == ReportFormat.HTML:
-        return export_html_report(result, config)
+    exporter_function = exporters.get(config.format)
 
-    if config.format == ReportFormat.CSV:
-        raise NotImplementedError("CSV report export is not implemented yet.")
+    if exporter_function is None:
+        raise ValueError(f"Unsupported report format: {config.format!r}")
 
-    raise ValueError(f"Unsupported report format: {config.format!r}")
+    return exporter_function(result, config)

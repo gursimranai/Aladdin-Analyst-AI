@@ -103,15 +103,3 @@ def test_export_report_dispatches_html(tmp_path, monkeypatch):
     )
 
     assert export_report(result, config) is expected
-
-
-def test_export_report_rejects_unsupported_csv_format(tmp_path):
-    result = make_analysis_result()
-
-    config = ReportConfig(
-        output_dir=tmp_path,
-        format=ReportFormat.CSV,
-    )
-
-    with pytest.raises(NotImplementedError, match="CSV"):
-        export_report(result, config)
