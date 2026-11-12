@@ -15,9 +15,19 @@ from aladdin.reporting import (
 
 
 def make_analysis_result() -> AnalysisResult:
+    """Create a lightweight AnalysisResult for exporter tests."""
+
     result = AnalysisResult.__new__(AnalysisResult)
     result.source = "sample.csv"
     return result
+
+
+def test_flatten_report_value_serializes_fallback_values():
+    value = {"coordinates": (10, 20)}
+
+    assert exporter._flatten_report_value(value) == [
+        ("coordinates", "[10, 20]", "tuple"),
+    ]
 
 
 def test_flatten_report_value_handles_nested_dictionaries():
@@ -184,3 +194,41 @@ def test_build_csv_document_preserves_negative_numeric_values():
 
     assert rows[1] == ["profile", "temperature", "-250", "int"]
     assert rows[2] == ["profile", "description", "'-250", "str"]
+
+
+def test_flatten_report_value_rejects_unsupported_fallback_value():
+    value = {"unsupported": object()}
+
+    with pytest.raises(TypeError):
+        exporter._flatten_report_value(value)
+
+
+def test_export_csv_report_logs_and_reraises_export_error(
+    tmp_path,
+    monkeypatch,
+    caplog,
+):
+    import logging
+
+    def fail_build(result, config, generated_at):
+        raise TypeError("Simulated CSV serialization failure.")
+
+    monkeypatch.setattr(
+        exporter,
+        "_build_report_document",
+        fail_build,
+    )
+
+    config = ReportConfig(
+        output_dir=tmp_path,
+        format=ReportFormat.CSV,
+    )
+
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(
+            TypeError,
+            match="CSV serialization failure",
+        ):
+            export_csv_report(make_analysis_result(), config)
+
+    assert "Failed to export CSV report" in caplog.text
