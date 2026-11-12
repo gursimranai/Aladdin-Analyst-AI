@@ -1,14 +1,20 @@
+import csv
+import json
 from pathlib import Path
 
 from aladdin import (
     CleaningConfig,
     MissingValueConfig,
     MissingValueStrategy,
+    ReportConfig,
+    ReportFormat,
+    ReportResult,
     analyze_file,
+    export_report,
 )
 
 
-def test_complete_analysis_workflow():
+def test_complete_analysis_workflow(tmp_path: Path):
     project_root = Path(__file__).resolve().parents[2]
     file_path = project_root / "datasets" / "sample" / "messy_sales.csv"
 
@@ -77,3 +83,69 @@ def test_complete_analysis_workflow():
 
     # Verify the final quality assessment.
     assert result.final_quality_report.is_healthy
+
+    # Verify JSON, HTML, and CSV report exports through the public API.
+    report_dir = tmp_path / "reports"
+
+    expected_sections = {
+        "profile",
+        "quality",
+        "recommendations",
+        "insights",
+        "cleaning_summary",
+    }
+
+    for report_format in (
+        ReportFormat.JSON,
+        ReportFormat.HTML,
+        ReportFormat.CSV,
+    ):
+        report_result = export_report(
+            result,
+            ReportConfig(
+                output_dir=report_dir / report_format.value,
+                format=report_format,
+            ),
+        )
+
+        assert isinstance(report_result, ReportResult)
+        assert report_result.format == report_format
+        assert report_result.output_path.exists()
+        assert report_result.output_path.stat().st_size > 0
+        assert report_result.file_size_bytes == report_result.output_path.stat().st_size
+        assert report_result.metadata["source"] == str(file_path)
+
+        if report_format == ReportFormat.JSON:
+            report_document = json.loads(
+                report_result.output_path.read_text(encoding="utf-8")
+            )
+
+            assert expected_sections.issubset(report_document.keys())
+            assert report_document["metadata"]["format"] == "json"
+            assert report_document["metadata"]["source"] == str(file_path)
+
+        elif report_format == ReportFormat.HTML:
+            html_document = report_result.output_path.read_text(encoding="utf-8")
+
+            assert "<html" in html_document.lower()
+            assert "</html>" in html_document.lower()
+
+        elif report_format == ReportFormat.CSV:
+            with report_result.output_path.open(
+                "r",
+                encoding="utf-8",
+                newline="",
+            ) as csv_file:
+                csv_rows = list(csv.DictReader(csv_file))
+
+            assert csv_rows
+            assert {
+                "section",
+                "item",
+                "value",
+                "data_type",
+            }.issubset(csv_rows[0].keys())
+
+            exported_sections = {row["section"] for row in csv_rows}
+
+            assert expected_sections.issubset(exported_sections)
