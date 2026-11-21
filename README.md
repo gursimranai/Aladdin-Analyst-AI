@@ -1,25 +1,26 @@
 # 🧞 Aladdin Analyst AI
 
 <p align="center">
-  <strong>A modular, intelligent data analysis engine built to make working with data simpler, smarter, and more explainable.</strong>
+  <strong>A modular Python data-analysis library for turning raw datasets into structured analysis, evidence-backed insights, and actionable cleaning recommendations.</strong>
 </p>
 
 <p align="center">
-  From raw datasets to data quality, cleaning recommendations, and actionable insights — built one capability at a time.
+  <a href="https://github.com/gursimranai/Aladdin-Analyst-AI">
+    <img src="https://img.shields.io/badge/Project-Aladdin%20Analyst%20AI-6C5CE7?style=for-the-badge" alt="Aladdin Analyst AI">
+  </a>
+  <img src="https://img.shields.io/badge/Version-0.1.0-2563EB?style=for-the-badge" alt="Version 0.1.0">
+  <img src="https://img.shields.io/badge/Status-Active%20Development-F59E0B?style=for-the-badge" alt="Active development">
+  <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.11+">
+  <img src="https://img.shields.io/badge/Tests-497%20Passing-16A34A?style=for-the-badge" alt="497 tests passing">
+  <img src="https://img.shields.io/badge/License-Apache--2.0-0F766E?style=for-the-badge" alt="Apache 2.0 license">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-0.1.0-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Status-Active%20Development-orange?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tests-283%20Passing-success?style=for-the-badge" />
-</p>
-
-<p align="center">
-  <a href="#-overview">Overview</a> •
-  <a href="#-features">Features</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-architecture">Architecture</a> •
+  <a href="#-overview">Overview</a> ·
+  <a href="#-capabilities">Capabilities</a> ·
+  <a href="#-quick-start">Quick start</a> ·
+  <a href="#-architecture">Architecture</a> ·
+  <a href="#-quality-and-testing">Quality & testing</a> ·
   <a href="#-roadmap">Roadmap</a>
 </p>
 
@@ -27,115 +28,142 @@
 
 ## 🧭 Overview
 
-**Aladdin Analyst AI** is an open-source Python project focused on building a modular and intelligent data analysis system.
+**Aladdin Analyst AI** is an open-source Python project focused on building a modular, reliable, and extensible data-analysis library.
 
-The goal is to help users move from unfamiliar, raw datasets toward structured analysis and evidence-backed insights.
+The project aims to help developers and data practitioners move from raw datasets to a structured understanding of their data through profiling, quality assessment, cleaning, recommendations, insights, visualization, and report generation.
 
-Rather than building an unrestricted AI agent from the beginning, Aladdin is being developed around a reliable analytical foundation:
+The engineering approach is deliberate: establish a dependable analytical foundation before introducing machine-learning or language-model-driven automation.
+
+### The analytical workflow
 
 ```text
-              RAW DATA
-                  │
-                  ▼
-            DATA INGESTION
-                  │
-                  ▼
-           DATA PROFILING
-                  │
-                  ▼
-        DATA QUALITY ASSESSMENT
-                  │
-                  ▼
-       CLEANING RECOMMENDATIONS
-                  │
-                  ▼
-          AUTOMATED INSIGHTS
-                  │
-                  ▼
-        CONFIGURABLE CLEANING
-                  │
-                  ▼
-          FINAL DATA PROFILE
-                  │
-                  ▼
-             ANALYSIS
+                         INPUT DATA
+                             │
+                             ▼
+                       DATA INGESTION
+                             │
+                             ▼
+                       DATA PROFILING
+                             │
+                             ▼
+                   DATA QUALITY ASSESSMENT
+                             │
+                 ┌───────────┴───────────┐
+                 ▼                       ▼
+          RECOMMENDATIONS          INSIGHT ENGINE
+                 │                       │
+                 └───────────┬───────────┘
+                             ▼
+                       CLEANING ENGINE
+                             │
+                             ▼
+                       FINAL PROFILE
+                             │
+                             ▼
+                    FINAL QUALITY REPORT
+                             │
+                             ▼
+                    STRUCTURED ANALYSIS
+                             │
+                             ▼
+                    REPORTING & EXPORTS
 ```
 
-The current implementation already provides the foundational workflow, while advanced analytical and AI capabilities remain part of the roadmap.
-
-> **The vision is ambitious, but the implementation is incremental. Every feature should be functional, tested, and documented before being presented as complete.**
-
-## ✨ Features
-
-### Currently implemented
-
-| Module | Capabilities | Status |
-|---|---|---|
-| Data Ingestion | CSV, Excel, JSON, Parquet | ✅ |
-| Data Profiling | Dataset statistics, missing values, unique values, duplicates | ✅ |
-| Quality Assessment | Missing values, constant columns, duplicate rows, structural issues | ✅ |
-| Cleaning Engine | Configurable missing-value handling, duplicate removal, constant-column removal | ✅ |
-| Recommendation Engine | Cleaning suggestions with priorities and approval requirements | ✅ |
-| Insight Engine | Missing values, dominant categories, high cardinality, outliers, skewness | ✅ |
-| Analysis Pipeline | Integrated profiling, quality, recommendations, insights, and cleaning | ✅ |
-| Testing | Unit and integration test suite | ✅ |
-| Visualization Engine | Histograms, bar charts, missing-value charts, correlation heatmaps | ✅ |
-
-### Development principles
-
-- **Data integrity:** Preserve the original dataset during analysis and cleaning.
-- **Controlled automation:** Make cleaning operations explicit and configurable.
-- **Explainability:** Provide structured evidence behind recommendations and insights.
-- **Modularity:** Keep components independent and reusable.
-- **Reliability:** Validate behavior through automated tests.
-- **Honest development:** Clearly distinguish implemented capabilities from future plans.
+> **Development principle:** the vision can describe the future, but the implementation must represent what is actually built. Planned AI/LLM capabilities are not presented as current functionality.
 
 ---
 
-## 🚀 Quick Start
+## ✨ Capabilities
+
+The following capabilities are implemented in the current development version.
+
+| Component | Current capabilities |
+|---|---|
+| **Data ingestion** | CSV, Excel (`.xlsx`), JSON, and Parquet loaders, plus a unified format dispatcher |
+| **Data profiling** | Dataset dimensions, data types, missing values, unique values, duplicates, numeric statistics, and categorical summaries |
+| **Data quality** | Detection of missing values, duplicate rows, constant columns, empty datasets, and duplicate column names |
+| **Cleaning engine** | Configurable missing-value handling, imputation, duplicate-row removal, and constant-column removal |
+| **Recommendations** | Structured cleaning suggestions with action, priority, affected-column information, and approval requirements |
+| **Insight engine** | Missing-value observations, dominant categories, high-cardinality columns, outlier detection, skewness, and numerical correlation analysis |
+| **Analysis pipeline** | Coordinates profiling, quality assessment, recommendations, insights, cleaning, and final assessment |
+| **Visualization** | Histograms, bar charts, missing-value charts, and correlation heatmaps |
+| **Reporting** | JSON, HTML, and CSV report exports |
+| **Package engineering** | Modular package structure, public API, build configuration, and optional dependency groups |
+
+### Design principles
+
+- **Data integrity:** analysis and cleaning should not silently mutate the caller's original DataFrame.
+- **Controlled automation:** cleaning behavior is configurable; recommendations are separate from execution.
+- **Evidence-backed insights:** analytical observations include structured evidence where applicable.
+- **Explicit validation:** invalid inputs and unsupported configurations should fail clearly.
+- **Modularity:** components are separated into focused, reusable modules.
+- **Testability:** behavior is verified through unit and integration tests.
+- **Honest scope:** implemented functionality is distinguished from the roadmap.
+
+---
+
+## 🚀 Quick start
 
 ### 1. Clone the repository
 
 ```bash
 git clone https://github.com/gursimranai/Aladdin-Analyst-AI.git
-
 cd Aladdin-Analyst-AI
 ```
 
-### 2. Create a virtual environment
+### 2. Create and activate a virtual environment
+
+**Windows PowerShell**
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+**macOS / Linux**
 
 ```bash
 python -m venv .venv
-```
-
-Activate it on Windows PowerShell:
-
-```powershell
-.venv\Scripts\Activate.ps1
+source .venv/bin/activate
 ```
 
 ### 3. Install the project
 
-Install the package with development tools and optional Excel/Parquet support:
+Install the package with its development tools and optional support for Excel, Parquet, and visualization:
 
 ```bash
-python -m pip install -e ".[dev,excel,parquet]"
+python -m pip install -e ".[dev,excel,parquet,visualization]"
 ```
 
-### 4. Run your first analysis
+For a basic installation without optional features:
+
+```bash
+python -m pip install -e .
+```
+
+### 4. Run an analysis
 
 ```python
-from aladdin import analyze_file
+import pandas as pd
 
-# Analyze a dataset
-result = analyze_file("datasets/sample/sample_sales.csv")
+from aladdin import analyze_dataframe
+
+data = pd.DataFrame(
+    {
+        "product": ["Laptop", "Mouse", "Keyboard", "Laptop", None],
+        "price": [75000, 1200, 2500, 75000, 1800],
+        "quantity": [2, 5, 3, 2, 4],
+    }
+)
+
+result = analyze_dataframe(data)
 
 # Initial dataset profile
 print("Initial profile:")
 print(result.initial_profile)
 
-# Data quality
-print("\nData quality:")
+# Data-quality assessment
+print("\nInitial data quality:")
 print(result.initial_quality_report)
 
 # Cleaning recommendations
@@ -143,37 +171,55 @@ print("\nRecommendations:")
 for recommendation in result.recommendations.recommendations:
     print(recommendation)
 
-# Automated insights
+# Automatically generated observations
 print("\nInsights:")
 for insight in result.insights.insights:
     print(insight)
 
-# Final cleaned dataset
-print("\nFinal dataset shape:")
-print(result.dataframe.shape)
+# Result after the configured cleaning workflow
+print("\nFinal dataset:")
+print(result.dataframe)
 ```
 
-Aladdin returns a structured analysis result containing the initial profile, quality report, recommendations, insights, cleaning result, and final profile.
+The analysis returns an `AnalysisResult` containing the initial profile, initial quality report, recommendations, insights, cleaning result, final profile, and final quality report.
+
+### Other entry points
+
+```python
+from aladdin import analyze_dataframe, analyze_file, load_csv, profile_data
+
+# Load a CSV directly
+dataframe = load_csv("path/to/data.csv")
+
+# Profile an existing DataFrame
+profile = profile_data(dataframe)
+
+# Analyze an existing DataFrame
+result = analyze_dataframe(dataframe)
+
+# Load and analyze a supported file
+file_result = analyze_file("path/to/data.csv")
+```
+
+Supported file extensions for the unified loader are `.csv`, `.xlsx`, `.json`, and `.parquet`.
 
 ---
 
 ## 🏗️ Architecture
 
-Aladdin follows a **modular monolith architecture**.
-
-Each major capability has its own module, while the analysis pipeline coordinates the workflow.
+Aladdin follows a **modular monolith architecture**. Each capability lives in a focused package, while the analysis pipeline coordinates the end-to-end workflow.
 
 ```text
 Aladdin-Analyst-AI/
 │
 ├── src/
 │   └── aladdin/
-│       │
 │       ├── ingestion/
 │       │   ├── csv_loader.py
 │       │   ├── excel_loader.py
 │       │   ├── json_loader.py
-│       │   └── parquet_loader.py
+│       │   ├── parquet_loader.py
+│       │   └── loader.py
 │       │
 │       ├── profiling/
 │       │   ├── models.py
@@ -199,6 +245,15 @@ Aladdin-Analyst-AI/
 │       │   ├── models.py
 │       │   └── analyzer.py
 │       │
+│       ├── visualization/
+│       │   ├── config.py
+│       │   ├── engine.py
+│       │   └── models.py
+│       │
+│       ├── reporting/
+│       │   ├── exporter.py
+│       │   └── models.py
+│       │
 │       ├── exceptions.py
 │       ├── logging_config.py
 │       └── __init__.py
@@ -215,72 +270,54 @@ Aladdin-Analyst-AI/
 └── LICENSE
 ```
 
-*This is a representative view of the implemented package structure, not an exhaustive file listing.*
+*This is a high-level view of the package structure, not an exhaustive listing of every project file.*
 
-### Analysis workflow
+### Separation of responsibilities
 
-```text
-                  INPUT DATA
-                      │
-                      ▼
-                DATA INGESTION
-                      │
-                      ▼
-               INITIAL PROFILE
-                      │
-                      ▼
-              QUALITY ASSESSMENT
-                      │
-            ┌─────────┴─────────┐
-            ▼                   ▼
-      RECOMMENDATIONS     INSIGHT ENGINE
-            │                   │
-            └─────────┬─────────┘
-                      ▼
-               CLEANING ENGINE
-                      │
-                      ▼
-                FINAL PROFILE
-                      │
-                      ▼
-             FINAL QUALITY REPORT
-                      │
-                      ▼
-               ANALYSIS RESULT
-```
+| Layer | Responsibility |
+|---|---|
+| Ingestion | Read supported file formats into Pandas DataFrames |
+| Profiling | Summarize dataset and column characteristics |
+| Quality | Identify structural and data-quality issues |
+| Recommendations | Convert detected issues into suggested actions |
+| Cleaning | Apply explicitly configured data-cleaning operations |
+| Insights | Generate deterministic, evidence-oriented observations |
+| Pipeline | Coordinate the analysis stages and package their results |
+| Visualization | Create charts from dataset characteristics |
+| Reporting | Serialize analysis outputs into exportable reports |
 
-The original dataset is not modified by the analysis workflow. Cleaning operates on a separate working copy.
+The pipeline keeps the original input DataFrame separate from the working data used for cleaning. Recommendations are generated independently and are not silently executed.
 
 ---
 
-## 🧠 Core Components
+## 🔍 Core components
 
-### 1. Data Ingestion
+### 1. Data ingestion
 
-Supports loading datasets from:
+Format-specific loaders support:
 
 - CSV
 - Excel (`.xlsx`)
 - JSON
 - Parquet
 
-A unified loader dispatches files to the appropriate format-specific loader.
+A unified `load_data()` function selects a loader based on the file extension. Loader-specific keyword arguments are forwarded to the corresponding Pandas reader.
 
-### 2. Data Profiling
+### 2. Data profiling
 
-Provides structured information about datasets, including:
+The profiler produces structured dataset and column summaries, including:
 
-- Dataset dimensions
+- Row and column counts
 - Column data types
 - Missing-value counts and percentages
-- Unique values
-- Duplicate rows
-- Numeric statistics
-- Categorical summaries
+- Unique-value counts and percentages
+- Duplicate-row counts
+- Numeric descriptive statistics
+- Frequent categorical values
 
-### 3. Data Quality Assessment
+### 3. Data quality assessment
 
-Identifies potential data-quality problems:
+The quality assessor identifies issues such as:
 
 - Missing values
 - Duplicate rows
@@ -288,334 +325,309 @@ Identifies potential data-quality problems:
 - Empty datasets
 - Duplicate column names
 
-The assessment does not modify the original data.
+The assessment reports issues without modifying the input DataFrame.
 
-### 4. Cleaning Engine
+### 4. Cleaning engine
 
-Supports explicitly configured operations:
+The cleaning engine supports configurable operations, including:
 
-- Keep missing values
-- Drop rows containing missing values
-- Fill missing values with a specified value
-- Mean, median, and mode imputation
-- Remove duplicate rows
-- Remove constant columns
+- Keeping missing values
+- Dropping rows containing missing values
+- Filling missing values with a specified value
+- Mean, median, and mode imputation where applicable
+- Removing duplicate rows
+- Removing constant columns
 
-Cleaning produces a result and report rather than silently modifying the input.
+Cleaning returns a structured result and report. It does not silently modify the original input.
 
-### 5. Recommendation Engine
+### 5. Cleaning recommendation engine
 
-Analyzes data-quality issues and produces structured cleaning recommendations.
+The recommendation engine translates supported data-quality issues into structured recommendations.
 
-Each recommendation can include:
+A recommendation can include:
 
-- Action
+- Recommended action
 - Priority
 - Affected column
-- Estimated affected count
-- Suggested strategy
-- Approval requirement
+- Affected-record count
+- Suggested missing-value strategy
+- Whether approval is required
 
-Recommendations are separate from execution. They do not automatically apply cleaning operations.
+Recommendations and cleaning execution remain separate steps.
 
-### 6. Automated Insight Engine
+### 6. Insight engine
 
-Identifies patterns and observations using deterministic analytical rules.
+The current deterministic insight engine identifies:
 
-Currently implemented:
-
-- Missing-value observations
+- Missing-value patterns
 - Dominant categorical values
 - High-cardinality columns
-- Potential outliers using the IQR method
+- Potential numerical outliers using the IQR method
 - Skewed numerical distributions
+- Strong numerical correlations
 
-Insights include structured evidence and priority information.
+Insights include category, priority, and structured evidence.
 
-> An observation is not automatically an explanation, prediction, or causal conclusion. Aladdin aims to keep these distinctions clear.
+> An observed pattern is not automatically an explanation, prediction, or causal conclusion. Aladdin aims to keep those distinctions explicit.
 
-### 7. Analysis Pipeline
+### 7. Analysis pipeline
 
-The pipeline connects the implemented components through two primary entry points:
+The main pipeline entry points are:
 
 ```python
 from aladdin import analyze_dataframe, analyze_file
 ```
 
 - `analyze_dataframe()` analyzes an existing Pandas DataFrame.
-- `analyze_file()` loads and analyzes a supported dataset file.
+- `analyze_file()` loads a supported dataset file and analyzes it.
 
 Both return an `AnalysisResult` containing the outputs of the workflow.
 
-### 8. Visualization Engine
+### 8. Visualization engine
 
-Provides configurable visual representations of dataset characteristics.
-
-Currently implemented chart capabilities include:
+Current chart types:
 
 - Histograms
 - Bar charts
 - Missing-value charts
 - Correlation heatmaps
 
-The visualization API exposes structured chart results and configuration options.
+Visualization configuration supports chart dimensions, output format, display behavior, and saving charts.
 
-Install visualization dependencies using:
+### 9. Reporting and exports
 
-```bash
-python -m pip install -e ".[visualization]"
-```
+Analysis reports can be exported in:
+
+- **JSON** — structured machine-readable output
+- **HTML** — standalone human-readable report
+- **CSV** — flattened report data
+
+The reporting layer provides structured report configuration and export results.
 
 ---
 
-## 🧪 Testing & Code Quality
+## 🧪 Quality and testing
 
-Reliability is a core part of the development process.
+Testing is a core part of the development process. The project uses automated tests to verify behavior, edge cases, validation rules, and regressions across its modules.
 
-The project uses:
+### Current verification checkpoint
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Latest%20reported%20test%20run-497%20passed-16A34A?style=for-the-badge&logo=pytest&logoColor=white" alt="497 tests passed">
+</p>
+
+The latest full-suite result reported during development was **497 passed**. This is a development checkpoint, not a claim that the project is finished. The count may change as implementation and regression tests evolve.
+
+### Development tools
 
 | Tool | Purpose |
 |---|---|
-| pytest | Automated testing |
+| pytest | Unit and integration testing |
 | Ruff | Linting and formatting |
-| Pandas | Data manipulation and analysis |
-| setuptools | Python packaging |
+| Coverage.py | Test coverage measurement |
+| Pandas | Tabular data operations |
+| NumPy | Numerical operations |
+| setuptools | Package build system |
 
 Run the test suite:
 
-```powershell
+```bash
 python -m pytest -q
 ```
 
 Run lint checks:
 
-```powershell
-python -m ruff check src tests
+```bash
+python -m ruff check .
 ```
 
 Check formatting:
 
-```powershell
-python -m ruff format --check src tests
+```bash
+python -m ruff format --check .
 ```
 
-<details>
-<summary><strong>Current verification</strong></summary>
+Build the distributions (if the `build` package is installed):
 
-- 283 tests passing
-- Unit and integration tests
-- Ruff lint checks passing
-- Formatting checks passing
-
-These results reflect the current development checkpoint and will evolve as new functionality is added.
-
-</details>
+```bash
+python -m build
+```
 
 ---
 
 ## 🛣️ Roadmap
 
-Aladdin is being developed in progressive milestones.
+Aladdin is being developed incrementally. The roadmap distinguishes implemented functionality from areas that still require design and development.
 
 | Area | Status |
 |---|---|
-| Project foundation and packaging | ✅ Completed |
-| Data ingestion | ✅ Implemented |
+| Project foundation and package structure | ✅ Implemented |
+| Package metadata and distribution builds | ✅ Implemented |
+| CSV, Excel, JSON, and Parquet ingestion | ✅ Implemented |
 | Data profiling | ✅ Implemented |
 | Data quality assessment | ✅ Implemented |
-| Configurable cleaning | ✅ Implemented |
+| Configurable data cleaning | ✅ Implemented |
 | Cleaning recommendations | ✅ Implemented |
-| Automated data insights | ✅ Implemented |
-| Correlation and relationship analysis | 🔄 Next |
-| Advanced statistical analysis | 📅 Planned |
-| Exploratory data analysis | 📅 Planned |
+| Deterministic insight generation | ✅ Implemented |
+| Numerical correlation analysis | ✅ Implemented |
+| Analysis pipeline | ✅ Implemented |
 | Visualization engine | ✅ Implemented |
-| Reporting and exports | 📅 Planned |
-| Machine-learning intelligence | 📅 Planned |
-| Natural-language data analysis | 🔭 Future |
-| Analyst agent and orchestration | 🔭 Future |
+| JSON, HTML, and CSV reporting | ✅ Implemented |
+| Broader exploratory data analysis workflows | 📅 Planned |
+| Advanced statistical analysis | 📅 Planned |
+| Expanded analytical and visualization capabilities | 📅 Planned |
+| Machine-learning-assisted analysis | 🔭 Future |
+| Natural-language dataset interaction | 🔭 Future |
+| Controlled analyst-agent orchestration | 🔭 Future |
 
-*The roadmap is flexible. Features will be introduced when their requirements, design, and implementation are ready.*
+The roadmap may change as requirements are evaluated and implementation progresses.
 
 ---
 
-## 🔭 Long-Term Vision
+## 🔭 Long-term direction
 
-The ultimate goal is to evolve Aladdin from a reliable data analysis library into a more intelligent analytical system.
+The long-term goal is to evolve Aladdin from a dependable data-analysis library into a more capable intelligent analytical system.
 
-Future capabilities may include:
+Potential future directions include:
 
-### Intelligent analysis
-- Dataset understanding and column-role detection
-- Statistical and relationship analysis
+**Intelligent analysis**
+- Dataset and column-role understanding
 - Context-aware analytical recommendations
+- More advanced statistical analysis
 - Anomaly detection
 - Evidence-backed explanations
 
-### Visualization and reporting
+**Visualization and reporting**
 - Automatic chart recommendations
+- Expanded report customization
 - Interactive dashboards
-- Structured analytical reports
-- Exportable results
+- More export formats
 
-### Machine learning
+**Machine learning**
 - Automated ML workflows
 - Model evaluation
 - Feature analysis
 - Predictive analytics
 
-### Natural-language intelligence
+**Natural-language interaction**
 - Ask questions about datasets
 - Generate analytical plans
 - Execute controlled analytical operations
-- Explain results in understandable language
+- Explain results in accessible language
 
-### Analyst orchestration
+**Analyst orchestration**
 - Coordinate analytical tools
 - Validate intermediate results
 - Support human approval
 - Maintain reproducible workflows
 
-These are long-term directions, not claims about currently available functionality.
+These are future directions, not claims about currently available functionality. AI/LLM capabilities will be considered after the analytical foundation is sufficiently reliable and evaluated.
 
 ---
 
-## 🛡️ Data Integrity, Security & Privacy
+## 🛡️ Data integrity and responsible development
 
-The project is being designed around responsible data handling.
+The project is being developed around a few important principles:
 
-Key principles:
-
-- Preserve original input data.
-- Keep transformations explicit.
+- Preserve original input data during analysis.
+- Keep transformations explicit and configurable.
+- Separate recommendations from execution.
 - Avoid unnecessary exposure of dataset contents in logs.
 - Never commit API keys, credentials, or private datasets.
-- Make external API usage explicit.
-- Build toward reproducible and auditable analytical operations.
+- Make external service usage explicit.
+- Aim for reproducible and auditable analytical operations.
 
-Future intelligent capabilities must operate within controlled execution boundaries.
+Future intelligent capabilities should operate within clear validation and execution boundaries.
 
 ---
 
-## 🔬 Development Philosophy
+## 🧠 Development philosophy
 
-Aladdin follows a research-driven engineering workflow:
+The project follows an iterative engineering workflow:
 
 ```text
        RESEARCH
-           │
-           ▼
-      UNDERSTAND
-           │
-           ▼
-        DESIGN
-           │
-           ▼
-     IMPLEMENT
-           │
-           ▼
+          │
+          ▼
+       UNDERSTAND
+          │
+          ▼
+         DESIGN
+          │
+          ▼
+       IMPLEMENT
+          │
+          ▼
          TEST
-           │
-           ▼
+          │
+          ▼
        EVALUATE
-           │
-           ▼
-      DOCUMENT
-           │
-           ▼
-       IMPROVE
+          │
+          ▼
+       DOCUMENT
+          │
+          ▼
+        IMPROVE
 ```
 
-The guiding principles:
+Guiding principles:
 
-1. **Data First** — Understand data before modifying it.
-2. **Evidence Before Claims** — Insights must be supported by evidence.
-3. **Controlled Automation** — Important actions should be explicit.
-4. **Explainability** — Make analytical decisions understandable.
-5. **Evaluation Before Trust** — Test features beyond a single example.
-6. **Modularity** — Build reusable, maintainable components.
-7. **Incremental Development** — Complete one capability before expanding.
-8. **Honest Documentation** — Never present planned features as implemented.
+1. **Data first** — understand data before modifying it.
+2. **Evidence before claims** — insights should be supported by data.
+3. **Controlled automation** — important actions should be explicit.
+4. **Explainability** — make analytical decisions understandable.
+5. **Evaluation before trust** — test beyond a single happy path.
+6. **Modularity** — build focused, reusable components.
+7. **Incremental development** — strengthen each capability before expanding.
+8. **Honest documentation** — never present planned features as implemented.
 
 ---
 
-## 🌱 Open Source & Contributions
+## 🌱 Open source and contributions
 
 Aladdin Analyst AI is intended to grow as an open-source project.
 
-Potential contribution areas include:
+Areas where future contributions and feedback may be useful include:
 
 - Data ingestion and connectors
 - Profiling and quality assessment
-- Cleaning algorithms
+- Cleaning strategies
 - Statistical methods
 - Insight generation
-- Visualization
-- Machine learning
+- Visualization and reporting
 - Testing and benchmarks
 - Documentation
 
-Contributions, feedback, and engineering discussions are welcome.
-
-Before contributing, please review the repository's contribution guidelines and code of conduct where available.
+Feedback, issue reports, and engineering discussions are welcome. Please review the repository's contribution guidelines and code of conduct if and when they are available.
 
 ---
 
-## 📌 Current Development Focus
+## 📌 Project status
 
-**Current version:** `0.1.0`
+| Detail | Current information |
+|---|---|
+| Project | Aladdin Analyst AI |
+| Package version | `0.1.0` |
+| Python requirement | `3.11+` |
+| Development status | Active development |
+| Latest reported full-suite result | `497 passed` |
+| License | Apache License 2.0 |
+| Primary language | Python |
 
-**Current focus:** Building a reliable analytical foundation.
-
-The next engineering milestone is **relationship and correlation analysis**, extending the insight engine beyond individual-column observations.
-
-The priority remains simple:
-
-Build reliable components first. Add intelligence on top of them.
-
----
-
-## ⭐ The Goal
-
-```text
-              AN IDEA
-                 │
-                 ▼
-          RELIABLE ENGINE
-                 │
-                 ▼
-        INTELLIGENT ANALYSIS
-                 │
-                 ▼
-        EVIDENCE-BASED INSIGHTS
-                 │
-                 ▼
-         CONTROLLED AUTOMATION
-                 │
-                 ▼
-          AI DATA ANALYST
-```
-
-Aladdin Analyst AI is being built one capability at a time.
-
-Every feature should solve a real problem.
-
-Every important result should have evidence.
-
-Every milestone should improve the engineering quality of the project.
-
-> **The vision can describe the future. The implementation must represent reality.**
+**Current engineering priority:** continue strengthening the implemented analytical foundation, validate edge cases, and improve the consistency of the public APIs before expanding into more advanced intelligence.
 
 ---
 
 ## 📜 License
 
-See [LICENSE](LICENSE) for licensing information.
+This project is licensed under the **Apache License 2.0**. See [`LICENSE`](LICENSE) for details.
 
 ---
 
 <p align="center">
   <strong>🧞 Aladdin Analyst AI</strong>
-  <br/>
+  <br>
   <sub>Turning raw data into meaningful understanding — one capability at a time.</sub>
+  <br><br>
+  <a href="https://github.com/gursimranai/Aladdin-Analyst-AI">Explore the repository</a>
 </p>
